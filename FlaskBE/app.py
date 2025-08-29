@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, request, jsonify
 from github import Github
 from openai import OpenAI
@@ -6,6 +8,7 @@ import requests
 app = Flask(__name__)
 
 # GitHub + OpenAI clients
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 @app.route('/review', methods=['POST'])
@@ -15,9 +18,12 @@ def review():
     github_token = data['git_token']
     pr_number = data['pr_number']
     openai_key = data['openai_key']
-
-    client = OpenAI(
-        api_key=f"{openai_key}")
+    if openai_key:
+        client = OpenAI(
+            api_key=f"{openai_key}")
+    else:
+        client = OpenAI(
+        api_key=f"{OPENAI_API_KEY}")
     gh = Github(github_token)
     repo = gh.get_repo(repo_name)
     pr = repo.get_pull(pr_number)
