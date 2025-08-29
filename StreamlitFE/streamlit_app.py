@@ -20,7 +20,7 @@ if st.button("Review PR"):
     else:
         with st.spinner("Fetching review from AI..."):
             try:
-                response = requests.post("http://127.0.0.1:5000/review", json={
+                response = requests.post("https://pr-reviewbot.onrender.com/review", json={
                     "repo": repo.strip(),
                     "git_token": g_token.strip(),
                     "pr_number": pr_number,
